@@ -1,5 +1,4 @@
 package com.narxoz.rpg.arena;
-
 public class ArenaFighter {
     private final String name;
     private int health;
@@ -32,25 +31,39 @@ public class ArenaFighter {
     public int getHealPotions() { return healPotions; }
 
     public void takeDamage(int amount) {
-        // TODO: Reduce health by amount; clamp health to a minimum of 0.
         health -= amount;
+        if (health < 0) {
+            health = 0;
+        }
     }
+    public int heal(int amount) {
+        if (healPotions <= 0) {
+            System.out.println(name + " has no potions left!");
+            return 0;
+        }
 
-    public void heal(int amount) {
-        // TODO: Increase health by amount; do not exceed maxHealth.
-        // TODO: Decide what happens when healPotions runs out — should healing be blocked?
+        int before = health;
+
         health += amount;
+        if (health > maxHealth) {
+            health = maxHealth;
+        }
+
         healPotions--;
-    }
 
+        int actualHeal = health - before;
+        return actualHeal;
+    }
     public void modifyDodgeChance(double delta) {
-        // TODO: Add delta to dodgeChance.
-        // TODO: Decide whether to clamp dodgeChance between 0.0 and 1.0.
         dodgeChance += delta;
-    }
 
+        if (dodgeChance < 0.0) {
+            dodgeChance = 0.0;
+        } else if (dodgeChance > 1.0) {
+            dodgeChance = 1.0;
+        }
+    }
     public boolean isAlive() {
-        // TODO: Return whether the fighter still has health remaining.
         return health > 0;
     }
 }
